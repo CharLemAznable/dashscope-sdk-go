@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/CharLemAznable/gfx/frame/gx"
 	"github.com/gogf/gf/v2/encoding/gjson"
+	"github.com/samber/lo"
 )
 
 type UpdateMetadataParam struct {
@@ -41,8 +41,11 @@ func ListResultFromJson[T any](json *gjson.Json, dataItemMapping func(*gjson.Jso
 		FirstId: json.Get("first_id").String(),
 		LastId:  json.Get("last_id").String(),
 		HasMore: json.Get("has_more").Bool(),
-		Data:    gx.SliceMapping(json.GetJsons("data"), dataItemMapping),
-		Object:  json.Get("object").String(),
+		Data: lo.Map(json.GetJsons("data"),
+			func(item *gjson.Json, _ int) T {
+				return dataItemMapping(item)
+			}),
+		Object: json.Get("object").String(),
 	}
 }
 
