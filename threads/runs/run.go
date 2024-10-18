@@ -4,6 +4,7 @@ import (
 	"github.com/CharLemAznable/dashscope-sdk-go/common"
 	"github.com/CharLemAznable/dashscope-sdk-go/tools"
 	"github.com/gogf/gf/v2/encoding/gjson"
+	"github.com/samber/lo"
 )
 
 type Run interface {
@@ -332,7 +333,7 @@ type TruncationStrategy interface {
 func NewTruncationStrategyLastMessages(lastMessages int) TruncationStrategy {
 	return &truncationStrategy{
 		Type:         "last_messages",
-		LastMessages: common.Int(lastMessages),
+		LastMessages: lo.ToPtr(lastMessages),
 	}
 }
 

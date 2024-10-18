@@ -8,6 +8,7 @@ type ToolCall interface {
 }
 
 func ToolCallsFromJsons(jsons []*gjson.Json) (toolCalls []ToolCall) {
+	toolCalls = make([]ToolCall, 0, len(jsons))
 	for _, json := range jsons {
 		if json.Get("type").String() == "function" {
 			toolCalls = append(toolCalls, NewFunctionToolCallFromJson(json))

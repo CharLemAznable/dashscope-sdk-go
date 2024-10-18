@@ -7,6 +7,7 @@ type Tool interface {
 }
 
 func FromJsons(jsons []*gjson.Json) (tools []Tool) {
+	tools = make([]Tool, 0, len(jsons))
 	for _, json := range jsons {
 		if json.Get("type").String() == "function" {
 			tools = append(tools, NewFunctionToolFromJson(json))

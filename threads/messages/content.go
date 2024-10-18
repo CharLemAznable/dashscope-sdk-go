@@ -7,6 +7,7 @@ type Content interface {
 }
 
 func ContentsFromJsons(jsons []*gjson.Json) (contents []Content) {
+	contents = make([]Content, 0, len(jsons))
 	for _, json := range jsons {
 		if json.Get("type").String() == "text" {
 			contents = append(contents, NewTextContentFromJson(json))
