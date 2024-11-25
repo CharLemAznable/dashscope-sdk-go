@@ -7,7 +7,6 @@ import (
 	"github.com/CharLemAznable/dashscope-sdk-go/threads"
 	"github.com/CharLemAznable/dashscope-sdk-go/threads/messages"
 	"github.com/CharLemAznable/dashscope-sdk-go/tools"
-	"github.com/CharLemAznable/gfx/frame/gx"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gvalid"
 	"time"
@@ -246,8 +245,8 @@ func validateSubmitToolOutputsParam(ctx context.Context, param *SubmitToolOutput
 
 func callSteam(ctx context.Context, url string, data ...interface{}) RunStream {
 	stream, cli := newRunStream(), client.Client(ctx)
-	gx.GoX(func() {
-		eventSource := cli.PostEventSource(url, data...)
+	g.Go(ctx, func(ctx context.Context) {
+		eventSource := cli.PostEventSource(ctx, url, data...)
 		defer func() {
 			eventSource.Close()
 			stream.Close(eventSource.Err())
@@ -257,8 +256,8 @@ func callSteam(ctx context.Context, url string, data ...interface{}) RunStream {
 			stream.Push(newRunStreamEvent(event))
 		}
 
-	}, func(exception error) {
-		g.Log().Errorf(context.Background(), "%+v", exception)
+	}, func(ctx context.Context, exception error) {
+		g.Log().Errorf(ctx, "%+v", exception)
 	})
 	return stream
 }

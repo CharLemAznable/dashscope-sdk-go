@@ -42,14 +42,10 @@ func Client(ctx context.Context) (client *gclientx.Client) {
 		client = gx.Client().SetIntLog(logger).
 			ContentJson().Prefix(getBaseUrl(ctx))
 		if apiKey := getApiKey(ctx); apiKey != "" {
-			client = client.Header(g.MapStrStr{
-				headerAuthorization: "Bearer " + apiKey,
-			})
+			client = client.Header(headerAuthorization, "Bearer "+apiKey)
 		}
 		if workSpace := getWorkSpace(ctx); workSpace != "" {
-			client = client.Header(g.MapStrStr{
-				headerWorkSpace: workSpace,
-			})
+			client = client.Header(headerWorkSpace, workSpace)
 		}
 		clientVar.Set(client)
 	})
